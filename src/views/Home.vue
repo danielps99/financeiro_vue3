@@ -1,23 +1,15 @@
 <script setup lang="ts">
-import createHttp from "@/stores/axiosConfig";
-import ResponseData from "@/models/responses/ResponseData";
-import ResponsePage from "@/models/responses/ResponseQuery";
-import Titulo from "@/models/Titulo";
-import Conta from "@/models/Conta";
-import { ref } from "vue";
+import {storeToRefs} from "pinia"
+import {movimentoStore} from "@/stores/movimento"
 
-const http = createHttp();
-const titulos = ref<Titulo[]>([]);
-const contas = ref<Conta[]>([]);
+const movStore = movimentoStore();
+const {titulos, getTitulosTotal} = storeToRefs(movStore);
+const {carregarDados} = movStore;
+//OUTRA FORMA DE MAPEAR AS ACTIONS DA STORE
+// import {mapActions} from "pinia"
+// const {carregarDados} = mapActions(useCounterStore, ["carregarDados"]);
 
-const urlPost = `/query/TitulosAgendadosDescricaoValorVencimentoOperacao/${1}`;
-http.post(urlPost, {}).then((res: ResponsePage<Titulo>) => {
-  titulos.value = res.data.data;
-});
-
-http.get("/conta").then((res: ResponseData<Conta>) => {
-  contas.value = res.data;
-});
+carregarDados();
 
 </script>
 <template>
@@ -30,16 +22,10 @@ http.get("/conta").then((res: ResponseData<Conta>) => {
     </div>
     <h1>HOME</h1>
     <h3>Titulos {{ titulos.length }}</h3>
+    <h3>getTitulosTotal() {{ getTitulosTotal }}</h3>
     <ul>
       <li v-for="c in titulos" :key="c.id">
         {{ c.descricao }} {{ c.valor }}
-      </li>
-    </ul>
-
-    <h3>Contas {{contas.length}}</h3>
-    <ul>
-      <li v-for="c in contas" :key="c.id">
-        {{ c.descricao }} {{ c.saldoAtual }}
       </li>
     </ul>
   </div>
