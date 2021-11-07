@@ -7,7 +7,8 @@ const http = createHttp();
 
 export const movimentoStore = defineStore("movimento", {
   state: () => ({
-    titulos: [] as Titulo[]
+    titulos: [] as Titulo[],
+    titulosPageNumber: 0
   }),
   getters: {
     getTitulosTotal: state => {
@@ -16,10 +17,14 @@ export const movimentoStore = defineStore("movimento", {
   },
   actions: {
     // async reset() { poderia ser assincrono
-    async carregarDados() {
-      const urlPost = `/query/TitulosAgendadosDescricaoValorVencimentoOperacao/${1}`;
+    carregarTitulos() {
+      this.titulosPageNumber++;
+      const urlPost = `/query/TitulosAgendadosDescricaoValorVencimentoOperacao/${this.titulosPageNumber}`;
       http.post(urlPost, {}).then((res: ResponseQuery<Titulo>) => {
-        this.titulos = res.data.data;
+        const maisTitulos: Titulo[] = res.data.data;
+        maisTitulos.map(t => {
+          this.titulos.push(t);
+        });
       });
     }
   }

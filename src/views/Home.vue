@@ -1,16 +1,30 @@
 <script setup lang="ts">
 import {storeToRefs} from "pinia"
 import {movimentoStore} from "@/stores/movimento"
+import {isBottomOfWindow} from '@/services/UtilWindowService'
 
 const movStore = movimentoStore();
 const {titulos, getTitulosTotal} = storeToRefs(movStore);
-const {carregarDados} = movStore;
+const {carregarTitulos} = movStore;
 //OUTRA FORMA DE MAPEAR AS ACTIONS DA STORE
 // import {mapActions} from "pinia"
-// const {carregarDados} = mapActions(useCounterStore, ["carregarDados"]);
+// const {carregarTitulos} = mapActions(useCounterStore, ["carregarTitulos"]);
 
-carregarDados();
+carregarDadosAoEntrarNaPagina();
 
+window.onscroll = () => {
+  if (isBottomOfWindow(window)) {
+    carregarTitulos();
+  }
+}
+
+function carregarDadosAoEntrarNaPagina(){
+  if(getTitulosTotal.value === 0) {
+    carregarTitulos();
+    carregarTitulos();
+    carregarTitulos();
+  }
+}
 </script>
 <template>
   <div class="home">
