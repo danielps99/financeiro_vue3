@@ -21,26 +21,25 @@ window.onscroll = () => {
 function carregarDadosAoEntrarNaPagina(){
   if(getTitulosTotal.value === 0) {
     carregarTitulos();
-    carregarTitulos();
-    carregarTitulos();
   }
 }
 </script>
 <template>
-  <div class="home">
-    <div class="columns is-multiline is-mobile is-centered">
-      <router-link to="/pagar"> Pagar </router-link>
-      <router-link to="/receber"> Receber </router-link>
-      <router-link to="/pagar_parcelado"> Pagar Parcelado </router-link>
-      <router-link to="/receber_parcelado"> Receber Parcelado </router-link>
+  <div class="mx-2 my-2">
+    <div class="columns is-multiline is-mobile is-centered mx-0">
+      <router-link to="/pagar" class="button is-warning column is-6 mb-1"> Pagar </router-link>
+      <router-link to="/receber" class="button is-success column is-6 mb-1"> Receber </router-link>
+      <router-link to="/pagar_parcelado" class="button button is-warning column is-6"> Pagar Parcelado </router-link>
+      <router-link to="/receber_parcelado" class="button is-success column is-6"> Receber Parcelado </router-link>
     </div>
-    <h1>HOME</h1>
-    <h3>Titulos {{ titulos.length }}</h3>
-    <h3>getTitulosTotal() {{ getTitulosTotal }}</h3>
-    <ul>
-      <li v-for="c in titulos" :key="c.id">
-        {{ c.descricao }} {{ c.valor }}
-      </li>
-    </ul>
+    <h3 class="has-text-centered"><b>Títulos Agendados</b></h3>
+    <div v-for="(titulo, index) in titulos" :key="titulo.id" :class="{ listrado: index % 2 == 0}">
+      <h3 class="is-12">{{ titulo.descricao }}</h3>
+      <div class="columns is-mobile" >
+        <span class="column has-text-left">{{titulo.vencimento}}</span>
+        <span class="column has-text-centered">{{titulo.operacao}}</span>
+        <span class="column has-text-right">{{titulo.valor}}</span>
+      </div>
+    </div>
   </div>
 </template>
